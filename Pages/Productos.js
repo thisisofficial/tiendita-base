@@ -1,9 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { styles } from "./styles";
 
 export default function Productos({navigation}){
 
     const [products, setProducts] = useState([]);
+    const [foo, setFoo] = useState(false);
 
     useEffect(()=> {
         const fetchData = async () =>{
@@ -15,7 +16,21 @@ export default function Productos({navigation}){
         }
 
         fetchData();
-    },[])
+    },[foo])
+
+    const handleDeleteProduct = async (id) => {
+        const response = await fetch(
+          `https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=eliminarproducto&id=${id}`
+        );
+        const data = await response.json();
+        if (data.mensaje === 'ok') {
+          alert('Producto eliminado con éxito');
+          setFoo(!foo);
+        } else {
+          alert('Hubo un error al eliminar el producto');
+        }
+        handleBack();
+      };
 
     const regresar = () =>{
         navigation.goBack()
