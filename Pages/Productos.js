@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
+import { View, Button, SafeAreaView, Text, Image, FlatList} from "react-native";
 import { styles } from "./styles";
 
 export default function Productos({navigation}){
 
     const [products, setProducts] = useState([]);
-    const [foo, setFoo] = useState(false);
 
     useEffect(()=> {
         const fetchData = async () =>{
@@ -16,7 +16,7 @@ export default function Productos({navigation}){
         }
 
         fetchData();
-    },[foo])
+    })  
 
     const handleDeleteProduct = async (id) => {
         const response = await fetch(
@@ -25,22 +25,24 @@ export default function Productos({navigation}){
         const data = await response.json();
         if (data.mensaje === 'ok') {
           alert('Producto eliminado con éxito');
-          setFoo(!foo);
         } else {
           alert('Hubo un error al eliminar el producto');
         }
-        handleBack();
       };
 
     const regresar = () =>{
         navigation.goBack()
     }
 
+    const handleProductClick = (item) =>{
+        navigation.navigate("ProductEdit", {nombre:item.nombre, descripcion:item.descripcion, cantidad:item.cantidad,preciodecosto:item.preciodecosto,preciodeventa:item.preciodeventa,fotografia:item.fotografia,idtienda:item.idtienda,id:item.id});
+    }
+
     return (
         <View style={styles.container}>
           <Button title="Regresar" onPress={regresar} color='skyblue' />
-          <ScrollView style={styles.scroll}>
-          <FlatList
+          <SafeAreaView style={styles.scroll}>
+            <FlatList
             data={products}
             renderItem={({ item }) => (
               <View style={styles.listitem}>
@@ -60,11 +62,11 @@ export default function Productos({navigation}){
               </View>
             )}
             keyExtractor={(item) => item.id}
-          />
-          </ScrollView>
+            />
+          </SafeAreaView>
           <Button
             title="Agregar producto"
-            onPress={() => setShowAddProductForm(true)}
+            onPress={() => navigation.navigate('AgregarProd')}
             style={styles.addButton}
             color='mediumseagreen'
           />

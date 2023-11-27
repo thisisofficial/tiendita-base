@@ -1,6 +1,7 @@
 import { TextInput, View, Button, Image } from 'react-native';
 import {styles} from './styles'
 import { useState } from 'react';
+import unnamed from '../assets/unnamed.png'
 
 export default function Login({navigation}){
     const [username, setUsername] = useState('');
@@ -13,7 +14,7 @@ export default function Login({navigation}){
         const data = await response.json();
         if (data.usuario) {
           alert('Iniciaste sesión correctamente');
-          navigation.navigate('MainMenu');
+          navigation.navigate('Main');
         } else {
           alert('Hubo un error al iniciar sesión');
         }
@@ -21,7 +22,7 @@ export default function Login({navigation}){
     return(
 
         <View style={styles.container}>
-            <Image style={styles.image} source={{uri:'https://play-lh.googleusercontent.com/-v67u65njTTd0z1RhV1XsAihibS-KlJL9N4vjQwbn1PY8aT-8PzeglIjZVi5o9vUI-A'}}></Image>
+            <Image src={"assets/unnamed.png"} style={{ width: 50, height: 50 , marginVertical:4}}/>
             <TextInput
             style={styles.input}
             onChangeText={setUsername}
