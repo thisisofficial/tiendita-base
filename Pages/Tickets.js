@@ -2,34 +2,44 @@ import { useEffect, useState } from "react";
 import { View, Button, SafeAreaView, Text, Image, FlatList} from "react-native";
 import { styles } from "./styles";
 
-export default function Tickets(){
+export default function Tickets({navigation}){
     const [products,setProducts] = useState([]);
     const [cliente,setClients] = useState([]);
-    const [onlyClients, setOnlyClients] = useState([])
+    const [onlyClients, setOnlyClients] = useState([{nombre:"any",fotografia:'any'}])
+    const [loading,setLoading] = useState(true);
 
     useEffect(()=>{
         const fetchData = async () =>{
+            try{
+            const clientresponse = await fetch("https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=obtenerclientes")
+            const clientdata = await clientresponse.json();
+            setClients(clientdata);
             const response = await fetch(
                 'https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=obtenertickets'
               );
             const data = await response.json();
             setProducts(data);
-            const clientresponse = await fetch("https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=obtenerclientes")
-            const clientdata = await clientresponse.json();
-            setClients(clientdata);
+            let useClients = []
             products.forEach(element => {
-                let useClients = []
                 cliente.forEach(client =>{
                     if(element.idcliente == client.id){
                         useClients.push(client);
                     }
                 })
-                setOnlyClients(useClients);
             });
+            setOnlyClients(useClients);
         }
-
+        catch(error){
+            console.error(error)
+        }
+        finally{
+            console.log("Hello, check this shit!")
+            setLoading(false);
+        }
+    }
         fetchData();
-    })
+        
+    },[loading])
 
     const handleDeleteTicket= async (id)=>{
         const response = await fetch(
@@ -41,6 +51,7 @@ export default function Tickets(){
           } else {
             alert('Hubo un error al eliminar el producto');
           }
+          setLoading(true)
         };
 
     const regresar = () =>{
@@ -48,6 +59,7 @@ export default function Tickets(){
     }
 
     const handleTicketClick = (item) =>{
+        setLoading(true)
         navigation.navigate('Ticket', {fecha:item.fecha,idcliente:item.idcliente,total:item.total,credito:item.credito,pagado:item.pagado,id:item.id})
     }
 
@@ -60,11 +72,11 @@ export default function Tickets(){
             renderItem={({ item, index }) => (
               <View style={styles.listitem}>
                 <Text onPress={() => handleTicketClick(item)}>
-                  {item.fecha} - {onlyClients[index].nombre} -{' '}
+                  {item.fecha} - {onlyClients[index]?onlyClients[index].nombre:"empty"} -{' '}
                   {item.total} - {item.credito} - {item.pagado}
                 </Text>
                 <Image
-                  source={{ uri: onlyClients[index].fotografia }}
+                  source={{ uri: onlyClients[index]?onlyClients[index].fotografia:"empty" }}
                   style={{ width: 50, height: 50 , marginVertical:4}}
                 />
                 <Button
@@ -79,7 +91,7 @@ export default function Tickets(){
           </SafeAreaView>
           <Button
             title="Agregar Ticket"
-            onPress={() => navigation.navigate('AgregarTicket')}
+            onPress={() => {navigation.navigate('AddTicket'); setLoading(true)}}
             style={styles.addButton}
             color='mediumseagreen'
           />

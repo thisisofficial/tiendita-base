@@ -9,7 +9,7 @@ export default function MainMenu({navigation}){
           <View style={styles.button}><Button title="Productos" onPress={() => {navigation.navigate("Productos")}} /></View>
           <View style={styles.button}><Button title="Clientes" onPress={() => navigation.navigate('Clientes')} /></View>
           <View style={styles.button}><Button title="Ventas" onPress={() => navigation.navigate('Tickets')} /></View>
-          <View style={styles.button}><Button title="Reportes" onPress={() => {}} /></View> 
+          <View style={styles.button}><Button title="Report" onPress={() => navigation.navigate('Report')} /></View> 
         </View>
       );
 }

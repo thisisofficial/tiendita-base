@@ -5,17 +5,26 @@ import { styles } from "./styles";
 export default function Clientes({navigation}){
 
     const [clients, setClients] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(()=>{
         const fetchData = async () =>{
+            try{
             const response = await fetch(
                 'https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=obtenerclientes'
               );
               const data = await response.json();
               setClients(data);
+            }
+            catch(error){
+                console.error(error)
+            }
+            finally{
+                setLoading(false)
+            }
         }
         fetchData();
-    })
+    },[loading])
 
     const handleDeleteClient = async (id) => {
         const response = await fetch(
@@ -27,9 +36,11 @@ export default function Clientes({navigation}){
         } else {
           alert('Hubo un error al eliminar el cliente');
         }
+        setLoading(true)
       };
 
       const handleClientClick = (item) =>{
+        setLoading(true)
         navigation.navigate("ClientEdit", {nombre:item.nombre, domicilio:item.domicilio, correo:item.correo,telefono:item.telefono,periodocobrar:item.periodocobrar,diacobrar:item.diacobrar,fotografia:item.fotografia,idtienda:item.idtienda,id:item.id,horacobrar:item.horacobrar});
     }
 
@@ -65,7 +76,7 @@ export default function Clientes({navigation}){
           </SafeAreaView>
           <Button
             title="Agregar cliente"
-            onPress={() => navigation.navigate("AgregarClientes")}
+            onPress={() => {setLoading(true);navigation.navigate("AgregarClientes")}}
             style={styles.addButton}
             color = 'mediumseagreen'
           />

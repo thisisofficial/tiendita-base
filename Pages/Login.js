@@ -8,9 +8,11 @@ export default function Login({navigation}){
     const [password, setPassword] = useState('');
 
     const handleLogin = async () => {
+        try{
         const response = await fetch(
           `https://programacion-de-moviles.000webhostapp.com/5f/api2.php?comando=login&usuario=${username}&contrasena=${password}`
         );
+        console.log(response);
         const data = await response.json();
         if (data.usuario) {
           alert('Iniciaste sesión correctamente');
@@ -18,7 +20,9 @@ export default function Login({navigation}){
         } else {
           alert('Hubo un error al iniciar sesión');
         }
-      };
+      }catch(error){
+        console.error(error);
+      }};
     return(
 
         <View style={styles.container}>

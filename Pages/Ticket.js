@@ -11,57 +11,90 @@ export default function Ticket({navigation, route}){
     const [products, setProducts] = useState([]);
     const [tempProducts, setTempProducts] = useState([]);
     const [client, setClient] = useState([]);
-    const [detalles, setDetalles] = useState([]);
+    const [detalles, setDetalles] = useState([{}]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(()=>{
-        const fetchData = async()=>{
+        
+        fetchData();
+    },[loading, pagado])
+
+    const fetchData = async()=>{
+        try{
+            if(!client){
         const response = await fetch(
             'https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=obtenerclientes'
           );
           const data = await response.json();
           setClient(data);
+          console.log(client)
           let clienty;
-        client.forEach(element => {
+            console.log(1)
+            client.forEach(element => {
             if(element.id == ticket.idcliente){
                 clienty = element;
             }
         })
         setClient(clienty);
-        let temp = 0;
-        const responsedetails = await fetch("https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=obtenerdetalleticket");
-        const detailsdata = await responsedetails.json();
-        setDetalles(detailsdata);
-        let tempdetails = [];
-        detalles.forEach(element => {
-            if(element.idticket == ticket.id){
-                tempdetails.push(element);
-                temp = temp+element.precio
-            }
-        })
-        setDetalles(tempdetails);
-        setTotal(temp);
-        setCredito(total-pagado);
-        const productsdetails = await fetch("https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=obtenerproductos")
-        const productdata = await productsdetails.json();
-        setTempProducts(productdata);
-        let tempprods = [];
-        detalles.forEach(element => {
-            tempProducts.forEach(element2 =>{
-                if(element2.id == element.idproducto){
-                    tempprods.push(element2);
-                }
-            })
-        })
-        setProducts(tempprods);
+        console.log("cliente"+clienty)
+    }
 
-        
+    }
+    catch(error){
+        console.log(error);
+    }
+    finally{
+        loaddetail()
+    }
 
         }
-        fetchData();
-    })
 
-    const handleCreditChange = (event) =>{
-        setPagado(event.target.value);
+    const loaddetail = async() =>{
+        try{
+            let temp = 0;
+            const responsedetails = await fetch("https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=obtenerdetalleticket");
+            const detailsdata = await responsedetails.json();
+            setDetalles(detailsdata);
+            console.log("why?" +detailsdata);
+            console.log("doublewhy"+ detalles)
+            let tempdetails = [];
+            console.log(tempdetails)
+            detalles.forEach(element => {
+                if(element.idticket == ticket.id){
+                    tempdetails.push(element);
+                    console.log(tempdetails)
+                    temp = temp+element.precio
+                }
+            })
+            setDetalles(tempdetails);
+            console.log(detalles)
+            setTotal(temp);
+            setCredito(total-pagado);
+            const productsdetails = await fetch("https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=obtenerproductos")
+            const productdata = await productsdetails.json();
+            setTempProducts(productdata);
+            let tempprods = [];
+            console.log(3)
+            detalles.forEach(element => {
+                console.log(4)
+                tempProducts.forEach(element2 =>{
+                    if(element2.id == element.idproducto){
+                        tempprods.push(element2);
+                    }
+                })
+            })
+            setProducts(tempprods);
+        }
+        catch(error){
+            console.log(error)
+        }
+        finally{
+            setLoading(false);
+        }
+    }
+
+    const handleCreditChange = (text) =>{
+        setPagado(text);
         setCredito(total-pagado);
     }
 
@@ -88,21 +121,27 @@ export default function Ticket({navigation, route}){
         } else {
           alert('Hubo un error al editar el producto');
         }
+        setLoading(true)
     }
 
     const handleDetailClick = async (item) =>{
+        setLoading(true)
         navigation.navigate("DetailEdit", {id: item.id, idticket:item.idticket, idproducto:item.idproducto,nombre:item.nombre, cantidad:item.cantidad, precio:item.precio})
     }
-
     return(
         <View style={styles.listitem}>
-                <Text onPress={() => handleTicketClick(item)}>
-                  Fecha: {ticket.fecha} - Cliente: {client.nombre} -{' '}
-                  Total:$ {total} - Pendiente:$ {credito}
+                <Text>
+                  Fecha: {ticket.fecha} - Cliente: {client?client.nombre:"empty"} -{' '}
+                  Total:$ {total} - Pendiente:$ {credito} - Pagado: $ {pagado}
                 </Text>
-                <TextInput value={pagado} onChange={handleCreditChange}></TextInput>
+                <TextInput
+                style={styles.input}
+                placeholder="Pagado"
+                value={pagado}
+                onChangeText={(text)=>handleCreditChange(text)}
+                />
                 <Image
-                  source={{ uri: client.fotografia }}
+                  source={{ uri: client?client.fotografia:"empty" }}
                   style={{ width: 50, height: 50 , marginVertical:4}}
                 />
                           <SafeAreaView style={styles.scroll}>
@@ -111,11 +150,11 @@ export default function Ticket({navigation, route}){
             renderItem={({ item, index }) => (
               <View style={styles.listitem}>
                 <Text onPress={() => handleDetailClick(item)}>
-                  {products[index].nombre} - {item.cantidad} -{' '}
+                  {products[index]?products[index].nombre:"empty"} - {item.cantidad} -{' '}
                   Concepto: {item.nombres} - {item.precio}
                 </Text>
                 <Image
-                  source={{ uri: products[index].fotografia }}
+                  source={{ uri: products[index]?products[index].fotografia:"empty" }}
                   style={{ width: 50, height: 50 , marginVertical:4}}
                 />
                 <Button
@@ -130,7 +169,7 @@ export default function Ticket({navigation, route}){
           </SafeAreaView>
           <Button
                   title="Agregar Detalle"
-                  onPress={() => navigation.navigate("AddTicketDetail",{id:ticket.id})}
+                  onPress={() => {setLoading(true);navigation.navigate("AddTicketDetail",{id:ticket.id})}}
                   color= 'mediumseagreen'
             />
             <Button

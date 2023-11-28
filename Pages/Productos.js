@@ -5,20 +5,30 @@ import { styles } from "./styles";
 export default function Productos({navigation}){
 
     const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(()=> {
         const fetchData = async () =>{
+            try{
             const response = await fetch(
                 'https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=obtenerproductos'
               );
             const data = await response.json();
             setProducts(data);
+            }
+            catch(error){
+                console.error(error);
+            }
+            finally{
+                setLoading(false);
+            }
         }
 
         fetchData();
-    })  
+    }, [loading])  
 
     const handleDeleteProduct = async (id) => {
+
         const response = await fetch(
           `https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=eliminarproducto&id=${id}`
         );
@@ -28,6 +38,7 @@ export default function Productos({navigation}){
         } else {
           alert('Hubo un error al eliminar el producto');
         }
+        setLoading(true);
       };
 
     const regresar = () =>{
@@ -35,7 +46,9 @@ export default function Productos({navigation}){
     }
 
     const handleProductClick = (item) =>{
+        setLoading(true);
         navigation.navigate("ProductEdit", {nombre:item.nombre, descripcion:item.descripcion, cantidad:item.cantidad,preciodecosto:item.preciodecosto,preciodeventa:item.preciodeventa,fotografia:item.fotografia,idtienda:item.idtienda,id:item.id});
+        
     }
 
     return (
@@ -66,7 +79,7 @@ export default function Productos({navigation}){
           </SafeAreaView>
           <Button
             title="Agregar producto"
-            onPress={() => navigation.navigate('AgregarProd')}
+            onPress={() => {navigation.navigate('AgregarProd');setLoading(true);}}
             style={styles.addButton}
             color='mediumseagreen'
           />

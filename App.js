@@ -11,6 +11,10 @@ import Clientes from './Pages/Clientes';
 import AddCliente from './Pages/AddClient';
 import EditClient from './Pages/EditClient';
 import Tickets from './Pages/Tickets';
+import Ticket from './Pages/Ticket';
+import AddTicket from './Pages/AddTicket';
+import Reporting from './Pages/Report';
+import AddTicketDetail from './Pages/AddTicketDetail';
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -26,7 +30,11 @@ export default function App() {
         <Stack.Screen name="AgregarClientes" component={AddCliente}/>
         <Stack.Screen name="ClientEdit" component={EditClient}/>
         <Stack.Screen name='Tickets' component={Tickets}/>
-
+        <Stack.Screen name='Ticket' component={Ticket}/>
+        <Stack.Screen name='AddTicket' component={AddTicket}/>
+        <Stack.Screen name='Report' component={Reporting}/>
+        <Stack.Screen name='AddTicketDetail' component={AddTicketDetail}/>
+        
       </Stack.Navigator>
     </NavigationContainer>
     
