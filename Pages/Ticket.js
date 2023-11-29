@@ -19,7 +19,7 @@ export default function Ticket({navigation, route}){
       const fetchDatai = async() =>{
             try{
               const response = await fetch(
-                'https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=obtenerdetalleticket'
+                'https://programaciondemovilesdos.000webhostapp.com/5f/api.php?comando=obtenerdetalleticket'
               );
               const data = await response.json();
               
@@ -48,7 +48,7 @@ export default function Ticket({navigation, route}){
               setTotal(temp);
               setCredito(total-pagado);
               try{
-                const productsdetails = await fetch("https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=obtenerproductos")
+                const productsdetails = await fetch("https://programaciondemovilesdos.000webhostapp.com/5f/api.php?comando=obtenerproductos")
                 const productdata = await productsdetails.json();
                 setTempProducts(productdata);
               }catch(error){
@@ -86,7 +86,7 @@ export default function Ticket({navigation, route}){
 
     const handleTicketChange = async () => {
         const response = await fetch(
-            `https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=editarticket&fecha=${ticket.fecha}&idcliente=${ticket.idcliente}&total=${total}&credito=${credito}&pagado=${pagado}&id=${ticket.id}`
+            `https://programaciondemovilesdos.000webhostapp.com/5f/api.php?comando=editarticket&fecha=${ticket.fecha}&idcliente=${ticket.idcliente}&total=${total}&credito=${credito}&pagado=${pagado}&id=${ticket.id}`
           );
           const data = await response.json();
           if (data.mensaje === 'ok') {
@@ -99,7 +99,7 @@ export default function Ticket({navigation, route}){
 
     const handleDeleteDetail = async (id) =>{
         const response = await fetch(
-            `https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=eliminardetalleticket&id=${id}`
+            `https://programaciondemovilesdos.000webhostapp.com/5f/api.php?comando=eliminardetalleticket&id=${id}`
         )
         const data = await response.json();
         if (data.mensaje === 'ok') {

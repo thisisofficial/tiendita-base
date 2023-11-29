@@ -17,7 +17,7 @@ export default function AddTicketDetail({navigation, route}){
         const fetchData = async() =>{
             try{
                 const response = await fetch(
-                    'https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=obtenerproductos'
+                    'https://programaciondemovilesdos.000webhostapp.com/5f/api.php?comando=obtenerproductos'
                   );
                 const data = await response.json();
                 setProducts(data);
@@ -46,7 +46,7 @@ export default function AddTicketDetail({navigation, route}){
 
     const handleSaveDetail = async() =>{
         const response = await fetch(
-            `https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=insertardetalleticket&idticket=${id}&idproducto=${productid}&nombre=${concepto}&cantidad=${quantity}&precio=${price}`
+            `https://programaciondemovilesdos.000webhostapp.com/5f/api.php?comando=insertardetalleticket&idticket=${id}&idproducto=${productid}&nombre=${concepto}&cantidad=${quantity}&precio=${price}`
           );
           const data = await response.json();
           if (data.mensaje === 'ok') {

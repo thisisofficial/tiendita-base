@@ -11,11 +11,11 @@ export default function Tickets({navigation}){
     useEffect(()=>{
         const fetchData = async () =>{
             try{
-            const clientresponse = await fetch("https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=obtenerclientes")
+            const clientresponse = await fetch("https://programaciondemovilesdos.000webhostapp.com/5f/api.php?comando=obtenerclientes")
             const clientdata = await clientresponse.json();
             setClients(clientdata);
             const response = await fetch(
-                'https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=obtenertickets'
+                'https://programaciondemovilesdos.000webhostapp.com/5f/api.php?comando=obtenertickets'
               );
             const data = await response.json();
             setProducts(data);
@@ -43,7 +43,7 @@ export default function Tickets({navigation}){
 
     const handleDeleteTicket= async (id)=>{
         const response = await fetch(
-            `https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=eliminarticket&id=${id}`
+            `https://programaciondemovilesdos.000webhostapp.com/5f/api.php?comando=eliminarticket&id=${id}`
           );
           const data = await response.json();
           if (data.mensaje === 'ok') {

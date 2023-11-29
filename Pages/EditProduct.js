@@ -17,7 +17,7 @@ export default function EditProduct({navigation, route}){
     const id = product.id
     const handleSaveProduct = async () => {
     const response = await fetch(
-        `https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=editarproducto&nombre=${newProductName}&descripcion=${newProductDescription}&cantidad=${newProductQuantity}&preciodecosto=${newProductCostPrice}&preciodeventa=${newProductSalePrice}&fotografia=${newProductPhotography}&idtienda=${newProductStoreId}&id=${id}`
+        `https://programaciondemovilesdos.000webhostapp.com/5f/api.php?comando=editarproducto&nombre=${newProductName}&descripcion=${newProductDescription}&cantidad=${newProductQuantity}&preciodecosto=${newProductCostPrice}&preciodeventa=${newProductSalePrice}&fotografia=${newProductPhotography}&idtienda=${newProductStoreId}&id=${id}`
       );
       const data = await response.json();
       if (data.mensaje === 'ok') {

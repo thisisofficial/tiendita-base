@@ -11,7 +11,7 @@ export default function Clientes({navigation}){
         const fetchData = async () =>{
             try{
             const response = await fetch(
-                'https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=obtenerclientes'
+                'https://programaciondemovilesdos.000webhostapp.com/5f/api.php?comando=obtenerclientes'
               );
               const data = await response.json();
               setClients(data);
@@ -28,7 +28,7 @@ export default function Clientes({navigation}){
 
     const handleDeleteClient = async (id) => {
         const response = await fetch(
-          `https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=eliminarcliente&id=${id}`
+          `https://programaciondemovilesdos.000webhostapp.com/5f/api.php?comando=eliminarcliente&id=${id}`
         );
         const data = await response.json();
         if (data.mensaje === 'ok') {

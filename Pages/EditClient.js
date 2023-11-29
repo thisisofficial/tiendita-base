@@ -17,7 +17,7 @@ export default function EditClient({navigation, route}){
 
     const handleSaveClientChanges = async () => {
         const response = await fetch(
-          `https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=editarcliente&nombre=${newClientName}&domicilio=${newClientAddress}&fotografia=${newClientPhotography}&correo=${newClientEmail}&telefono=${newClientPhone}&periodocobrar=${newClientBillingPeriod}&diacobrar=${newClientBillingDay}}&horacobrar=${newClientBillingHour}&idtienda=${newClientStoreId}&id=${id}`
+          `https://programaciondemovilesdos.000webhostapp.com/5f/api.php?comando=editarcliente&nombre=${newClientName}&domicilio=${newClientAddress}&fotografia=${newClientPhotography}&correo=${newClientEmail}&telefono=${newClientPhone}&periodocobrar=${newClientBillingPeriod}&diacobrar=${newClientBillingDay}}&horacobrar=${newClientBillingHour}&idtienda=${newClientStoreId}&id=${id}`
         );
         const data = await response.json();
         if (data.mensaje === 'ok') {

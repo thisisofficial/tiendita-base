@@ -10,7 +10,7 @@ export default function Login({navigation}){
     const handleLogin = async () => {
         try{
         const response = await fetch(
-          `https://programacion-de-moviles.000webhostapp.com/5f/api2.php?comando=login&usuario=${username}&contrasena=${password}`
+          `https://programaciondemovilesdos.000webhostapp.com/5f/api.php?comando=login&usuario=${username}&contrasena=${password}`
         );
         console.log(response);
         const data = await response.json();

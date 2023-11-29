@@ -11,7 +11,7 @@ export default function Productos({navigation}){
         const fetchData = async () =>{
             try{
             const response = await fetch(
-                'https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=obtenerproductos'
+                'https://programaciondemovilesdos.000webhostapp.com/5f/api.php?comando=obtenerproductos'
               );
             const data = await response.json();
             setProducts(data);
@@ -30,7 +30,7 @@ export default function Productos({navigation}){
     const handleDeleteProduct = async (id) => {
 
         const response = await fetch(
-          `https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=eliminarproducto&id=${id}`
+          `https://programaciondemovilesdos.000webhostapp.com/5f/api.php?comando=eliminarproducto&id=${id}`
         );
         const data = await response.json();
         if (data.mensaje === 'ok') {

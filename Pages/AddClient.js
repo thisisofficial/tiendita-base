@@ -16,7 +16,7 @@ export default function AddCliente({navigation}){
 
     const handleAddClient = async () => {
         const response = await fetch(
-          `https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=insertarcliente&nombre=${newClientName}&domicilio=${newClientAddress}&fotografia=${newClientPhotography}&correo=${newClientEmail}&telefono=${newClientPhone}&periodocobrar=${newClientBillingPeriod}&diacobrar=${newClientBillingDay}&horacobrar=${newClientBillingHour}&idtienda=${newClientStoreId}`
+          `https://programaciondemovilesdos.000webhostapp.com/5f/api.php?comando=insertarcliente&nombre=${newClientName}&domicilio=${newClientAddress}&fotografia=${newClientPhotography}&correo=${newClientEmail}&telefono=${newClientPhone}&periodocobrar=${newClientBillingPeriod}&diacobrar=${newClientBillingDay}&horacobrar=${newClientBillingHour}&idtienda=${newClientStoreId}`
         );
         const data = await response.json();
         if (data.mensaje === 'ok') {

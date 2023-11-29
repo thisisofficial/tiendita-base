@@ -13,7 +13,7 @@ export default function AddProduct({navigation}){
 
 const handleAddProduct = async () => {
     const response = await fetch(
-        `https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=insertarproducto&nombre=${newProductName}&descripcion=${newProductDescription}&cantidad=${newProductQuantity}&preciodecosto=${newProductCostPrice}&preciodeventa=${newProductSalePrice}&fotografia=${newProductPhotography}&idtienda=${newProductStoreId}`
+        `https://programaciondemovilesdos.000webhostapp.com/5f/api.php?comando=insertarproducto&nombre=${newProductName}&descripcion=${newProductDescription}&cantidad=${newProductQuantity}&preciodecosto=${newProductCostPrice}&preciodeventa=${newProductSalePrice}&fotografia=${newProductPhotography}&idtienda=${newProductStoreId}`
       );
       const data = await response.json();
       if (data.mensaje === 'ok') {

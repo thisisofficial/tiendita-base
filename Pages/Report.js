@@ -9,7 +9,7 @@ export default function Reporting() {
 
   const getReporte = async () => {
     try {
-      let response = await fetch(`https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=reporteventas&fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
+      let response = await fetch(`https://programaciondemovilesdos.000webhostapp.com/5f/api.php?comando=reporteventas&fechaInicio=${fechaInicio}&fechaFin=${fechaFin}`);
       let json = await response.json();
       setData(json);
     } catch (error) {
