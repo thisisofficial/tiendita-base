@@ -58,9 +58,8 @@ export default function Tickets({navigation}){
         navigation.goBack()
     }
 
-    const handleTicketClick = (item) =>{
-        setLoading(true)
-        navigation.navigate('Ticket', {fecha:item.fecha,idcliente:item.idcliente,total:item.total,credito:item.credito,pagado:item.pagado,id:item.id})
+    const handleTicketClick = (item,index) =>{
+        navigation.navigate('Ticket', {fecha:item.fecha,idcliente:item.idcliente,total:item.total,credito:item.credito,pagado:item.pagado,id:item.id,client:onlyClients[index].nombre,clientfoto:onlyClients[index].fotografia})
     }
 
     return(
@@ -71,7 +70,7 @@ export default function Tickets({navigation}){
             data={products}
             renderItem={({ item, index }) => (
               <View style={styles.listitem}>
-                <Text onPress={() => handleTicketClick(item)}>
+                <Text onPress={() => handleTicketClick(item,index)}>
                   {item.fecha} - {onlyClients[index]?onlyClients[index].nombre:"empty"} -{' '}
                   {item.total} - {item.credito} - {item.pagado}
                 </Text>

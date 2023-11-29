@@ -10,93 +10,79 @@ export default function Ticket({navigation, route}){
     const [total, setTotal] = useState(ticket.total);
     const [products, setProducts] = useState([]);
     const [tempProducts, setTempProducts] = useState([]);
-    const [client, setClient] = useState([]);
-    const [detalles, setDetalles] = useState([{}]);
+    
+    const [detalles, setDetalles] = useState([]);
+    const [oldDetalles, setOldDetalles] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(()=>{
-        
-        fetchData();
-    },[loading, pagado])
-
-    const fetchData = async()=>{
-        try{
-            if(!client){
-        const response = await fetch(
-            'https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=obtenerclientes'
-          );
-          const data = await response.json();
-          setClient(data);
-          console.log(client)
-          let clienty;
-            console.log(1)
-            client.forEach(element => {
-            if(element.id == ticket.idcliente){
-                clienty = element;
+      const fetchDatai = async() =>{
+            try{
+              const response = await fetch(
+                'https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=obtenerdetalleticket'
+              );
+              const data = await response.json();
+              
+              //alert(JSON.stringify(data))
+              setOldDetalles(data);
+              //alert(detalles)
+             
+            }catch(error){
+              
             }
-        })
-        setClient(clienty);
-        console.log("cliente"+clienty)
-    }
+            finally{
+              let temp = 0;
+              let tempdetails = [];
+              console.log(tempdetails);
+              oldDetalles.forEach(element => {
+                  if(element.idticket == ticket.id){
+                      tempdetails.push(element);
+                      console.log(tempdetails);
+                      temp = temp+parseFloat(element.precio)
+                      
+                  }
+              })
+              setDetalles(tempdetails);
+              console.log(detalles)
 
-    }
-    catch(error){
-        console.log(error);
-    }
-    finally{
-        loaddetail()
-    }
+              setTotal(temp);
+              setCredito(total-pagado);
+              try{
+                const productsdetails = await fetch("https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=obtenerproductos")
+                const productdata = await productsdetails.json();
+                setTempProducts(productdata);
+              }catch(error){
 
-        }
-
-    const loaddetail = async() =>{
-        try{
-            let temp = 0;
-            const responsedetails = await fetch("https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=obtenerdetalleticket");
-            const detailsdata = await responsedetails.json();
-            setDetalles(detailsdata);
-            console.log("why?" +detailsdata);
-            console.log("doublewhy"+ detalles)
-            let tempdetails = [];
-            console.log(tempdetails)
-            detalles.forEach(element => {
-                if(element.idticket == ticket.id){
-                    tempdetails.push(element);
-                    console.log(tempdetails)
-                    temp = temp+element.precio
-                }
-            })
-            setDetalles(tempdetails);
-            console.log(detalles)
-            setTotal(temp);
-            setCredito(total-pagado);
-            const productsdetails = await fetch("https://programacion-de-moviles.000webhostapp.com/5f/api.php?comando=obtenerproductos")
-            const productdata = await productsdetails.json();
-            setTempProducts(productdata);
-            let tempprods = [];
-            console.log(3)
-            detalles.forEach(element => {
-                console.log(4)
-                tempProducts.forEach(element2 =>{
-                    if(element2.id == element.idproducto){
-                        tempprods.push(element2);
-                    }
+              }finally{
+                let tempprods = [];
+                console.log(3)
+                detalles.forEach(element => {
+                    console.log(4)
+                    tempProducts.forEach(element2 =>{
+                        if(element2.id == element.idproducto){
+                            tempprods.push(element2);
+                        }
+                    })
                 })
-            })
-            setProducts(tempprods);
-        }
-        catch(error){
-            console.log(error)
-        }
-        finally{
-            setLoading(false);
-        }
-    }
+                setProducts(tempprods);
+                console.log(products)
+                setLoading(false)
+              }
+            }
+          
+      }  
+      fetchDatai()
+      
+    },[loading,pagado])
+
+
+    
 
     const handleCreditChange = (text) =>{
         setPagado(text);
         setCredito(total-pagado);
     }
+
 
     const handleTicketChange = async () => {
         const response = await fetch(
@@ -131,7 +117,7 @@ export default function Ticket({navigation, route}){
     return(
         <View style={styles.listitem}>
                 <Text>
-                  Fecha: {ticket.fecha} - Cliente: {client?client.nombre:"empty"} -{' '}
+                  Fecha: {ticket.fecha} - Cliente: {ticket.client?ticket.client:"empty"} -{' '}
                   Total:$ {total} - Pendiente:$ {credito} - Pagado: $ {pagado}
                 </Text>
                 <TextInput
@@ -141,7 +127,7 @@ export default function Ticket({navigation, route}){
                 onChangeText={(text)=>handleCreditChange(text)}
                 />
                 <Image
-                  source={{ uri: client?client.fotografia:"empty" }}
+                  source={{ uri: ticket.clientfoto?ticket.clientfoto:"empty" }}
                   style={{ width: 50, height: 50 , marginVertical:4}}
                 />
                           <SafeAreaView style={styles.scroll}>
@@ -168,6 +154,11 @@ export default function Ticket({navigation, route}){
             />
           </SafeAreaView>
           <Button
+                  title="Recargar detalles"
+                  onPress={() => setLoading(true)}
+                  color= 'khaki'
+            />
+          <Button
                   title="Agregar Detalle"
                   onPress={() => {setLoading(true);navigation.navigate("AddTicketDetail",{id:ticket.id})}}
                   color= 'mediumseagreen'
@@ -175,7 +166,7 @@ export default function Ticket({navigation, route}){
             <Button
                   title="Guardar"
                   onPress={() => handleTicketChange()}
-                  color= 'mediumseagreen'
+                  color= 'khaki'
             />
             <Button
                   title="Eliminar"
